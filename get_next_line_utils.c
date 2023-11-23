@@ -18,7 +18,6 @@
 size_t	ft_strlen(const char *str)
 {
 	int	i;
-
 	i = 0;
 	while (str[i] != '\0')
 	{
@@ -51,9 +50,22 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	if (len > (ft_strlen(s) - start))
 		len = ft_strlen(s) - start;
-	substr = (char *)malloc(sizeof(char) * len + 1);
+	substr = (char *)malloc((sizeof(char) * len) + 1);
 	if (!substr)
 		return (NULL);
 	ft_strlcpy(substr, s + start, len + 1);
 	return (substr);
+}
+
+char	*ft_strdup(const char *s)
+{
+	char	*str;
+
+	if (s == 0)
+		return (NULL);
+	str = malloc(ft_strlen(s) + 1);
+	if (str == NULL)
+		return (NULL);
+	ft_strlcpy(str, s, ft_strlen(s) + 1);
+	return (str);
 }

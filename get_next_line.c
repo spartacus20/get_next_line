@@ -1,23 +1,9 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+
-	+:+     */
-/*   By: jotomas- <jotomas-@student.42london.com    +#+  +:+
-	+#+        */
-/*                                                +#+#+#+#+#+
-	+#+           */
-/*   Created: 2023/11/22 12:39:34 by jotomas-          #+#    #+#             */
-/*   Updated: 2023/11/22 12:39:34 by jotomas-         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-unsigned int	find_break_index(char *buff, unsigned int start)
+
+static unsigned int	find_break_index(char *buff, unsigned int start)
 {
-	unsigned int	end;
+	unsigned int end;
 
 	end = start;
 	if (end != 0)
@@ -27,16 +13,25 @@ unsigned int	find_break_index(char *buff, unsigned int start)
 	return (end);
 }
 
+static void	free_null(char *buff, unsigned int end)
+{
+	if (buff[end] == '\0')
+	{
+		free(buff);
+		buff = NULL;
+	}
+}
+
 char	*get_next_line(int fd)
 {
-	char	*line;
-	size_t	read_bytes;
-	static char	*buff;
-	static unsigned int	start;
-	static unsigned int	end;
+	char *line = NULL; // Must be initialized.
+	size_t read_bytes;
+	static char *buff;
+	static unsigned int start;
+	static unsigned int end;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
+		return (NULL);
 	if (!buff)
 	{
 		buff = calloc(BUFFER_SIZE + 1, sizeof(char));
@@ -50,8 +45,30 @@ char	*get_next_line(int fd)
 		}
 		buff[read_bytes] = '\0';
 	}
-	end = find_break_index(buff, start);
-	line = ft_substr(buff, start, end);
-	start = end;
+	free_null(buff, end);
+	if (buff[end] != '\0' && buff[end] == '\n')
+	{
+		end = find_break_index(buff, start);
+		line = ft_substr(buff, start, end);
+		start = end;
+	}
 	return (line);
+}
+
+int	main(void)
+{
+	int fd = open("test2.txt", O_RDONLY);
+	char *line;
+	if (fd < 0)
+	{
+		printf("Something went wrong opening test.txt");
+		return (1);
+	}
+
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s\n", line);
+		free(line);
+	}
+	return (0);
 }
