@@ -51,6 +51,7 @@ char *ft_strndup(const char *str, size_t n)
 	size_t len;
 	char *copy;
 
+	len = 0;
 	while(len < n && str[len])
 		len++;
 

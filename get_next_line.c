@@ -1,14 +1,13 @@
 #include "get_next_line.h"
 
-
 char	*get_buffer(int fd, char *line)
 {
 	char *buff;
-	size_t bytes = 1;
+	int bytes;
 
 	if (!line)
 		line = ft_calloc(1, 1);
-
+	bytes = 1;
 	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	while (!ft_strchr(line, '\n') && bytes != 0)
 	{
@@ -61,7 +60,7 @@ char	*get_next_line(int fd)
 	char *line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
+		return (0);
 
 	buff = get_buffer(fd, buff);
 	if (!buff)
@@ -71,29 +70,29 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-// int	main(void)
-// {
-// 	int fd = open("test2.txt", O_RDONLY);
-// 	char *line;
-// 	int i = 1;
-// 	if (fd < 0)
-// 	{
-// 		printf("Something went wrong opening test.txt");
-// 		return (1);
-// 	}
 
-// 	while (line != NULL)
-// 	{
-// 		line = get_next_line(fd);
-// 		printf("line [%02d]: %s", i, line);
-// 		free(line);
-// 		i++;
-// 	}
+int main(void)
+{
+    int fd = open("test2.txt", O_RDONLY);
+    char *line;
+    int i = 0;
 
-// 	// while ((line = get_next_line(fd)) != NULL)
-// 	// {
-// 	// 	printf("%s\n", line);
-// 	// 	free(line);
-// 	// }
-// 	return (0);
-// }
+    if (fd < 0)
+    {
+        printf("Something went wrong opening test.txt");
+        return (1);
+    }
+
+    line = get_next_line(fd); // Initialize line before entering the loop
+
+    while (line)
+    {
+        printf("line [%02d]: %s", i, line);
+        free(line);
+        i++;
+
+        line = get_next_line(fd); // Get the next line
+    }
+
+    return (0);
+}
