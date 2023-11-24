@@ -1,74 +1,99 @@
 #include "get_next_line.h"
 
 
-static unsigned int	find_break_index(char *buff, unsigned int start)
+char	*get_buffer(int fd, char *line)
 {
-	unsigned int end;
+	char *buff;
+	size_t bytes = 1;
 
-	end = start;
-	if (end != 0)
-		end++;
-	while (buff[end] != '\n' && buff[end] != '\0')
-		end++;
-	return (end);
-}
+	if (!line)
+		line = ft_calloc(1, 1);
 
-static void	free_null(char *buff, unsigned int end)
-{
-	if (buff[end] == '\0')
+	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+	while (!ft_strchr(line, '\n') && bytes != 0)
 	{
-		free(buff);
-		buff = NULL;
-	}
-}
-
-char	*get_next_line(int fd)
-{
-	char *line = NULL; // Must be initialized.
-	size_t read_bytes;
-	static char *buff;
-	static unsigned int start;
-	static unsigned int end;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	if (!buff)
-	{
-		buff = calloc(BUFFER_SIZE + 1, sizeof(char));
-		if (!buff)
-			return (NULL);
-		read_bytes = read(fd, buff, BUFFER_SIZE);
-		if (read_bytes == -1)
+		bytes = read(fd, buff, BUFFER_SIZE);
+		if (bytes == -1)
 		{
 			free(buff);
 			return (NULL);
 		}
-		buff[read_bytes] = '\0';
+		buff[bytes] = '\0';
+		line = ft_strjoin(line, buff);
 	}
-	free_null(buff, end);
-	if (buff[end] != '\0' && buff[end] == '\n')
-	{
-		end = find_break_index(buff, start);
-		line = ft_substr(buff, start, end);
-		start = end;
-	}
+	free(buff);
 	return (line);
 }
 
-int	main(void)
+// Move to the next line.
+char	*get_next(char *buff)
 {
-	int fd = open("test2.txt", O_RDONLY);
-	char *line;
-	if (fd < 0)
-	{
-		printf("Something went wrong opening test.txt");
-		return (1);
-	}
+	char *new;
+	char *str;
+	size_t length;
 
-	while ((line = get_next_line(fd)) != NULL)
-	{
-		printf("%s\n", line);
-		free(line);
-	}
-	return (0);
+	new = strchr(buff, '\n');
+
+	if (!buff || !new)
+		return (NULL);
+
+	length = new - buff + 1;
+	str = ft_strndup(buff, length);
+	return (str);
 }
+// Move the buffer to the next ocurrency. then return a new buffer.
+char	*ft_realloc(char *buff)
+{
+	char *str;
+	if (!buff)
+		return (NULL);
+
+	str = ft_strchr(buff, '\n');
+	free(buff);
+	if (!str)
+		return (NULL);
+	return (ft_strndup(str, ft_strlen(str) + 1));
+}
+
+char	*get_next_line(int fd)
+{
+	static char *buff;
+	char *line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+
+	buff = get_buffer(fd, buff);
+	if (!buff)
+		return (NULL);
+	line = get_next(buff);
+	buff = ft_realloc(buff);
+	return (line);
+}
+
+// int	main(void)
+// {
+// 	int fd = open("test2.txt", O_RDONLY);
+// 	char *line;
+// 	int i = 1;
+// 	if (fd < 0)
+// 	{
+// 		printf("Something went wrong opening test.txt");
+// 		return (1);
+// 	}
+
+// 	while (line != NULL)
+// 	{
+// 		line = get_next_line(fd);
+// 		printf("line [%02d]: %s", i, line);
+// 		free(line);
+// 		i++;
+// 	}
+
+// 	// while ((line = get_next_line(fd)) != NULL)
+// 	// {
+// 	// 	printf("%s\n", line);
+// 	// 	free(line);
+// 	// }
+// 	return (0);
+// }
