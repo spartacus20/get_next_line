@@ -21,17 +21,16 @@ size_t	ft_strlen(const char *str)
 	int i;
 	i = 0;
 	while (str[i] != '\0')
-	{
 		i++;
-	}
+
 	return (i);
 }
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	size_t		i;
-	char		*str_dest;
-	const char	*str_src;
+	size_t i;
+	char *str_dest;
+	const char *str_src;
 
 	if ((!dest && !src) || n == 0)
 		return (dest);
@@ -46,46 +45,63 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-char *ft_strndup(const char *str, size_t n)
-{
-	size_t len;
-	char *copy;
+// char *ft_strndup(const char *str, size_t n)
+// {
+// 	size_t len;
+// 	char *copy;
 
-	len = 0;
-	while(len < n && str[len])
-		len++;
+// 	len = 0;
+// 	while(len < n && str[len])
+// 		len++;
 
-	if ((copy = malloc(len + 1)) == NULL)
-		return (NULL);
-	ft_memcpy(copy, str, len);
-	copy[len] = '\0';
-	return (copy);
+// 	if ((copy = malloc(len + 1)) == NULL)
+// 		return (NULL);
+// 	ft_memcpy(copy, str, len);
+// 	copy[len] = '\0';
+// 	return (copy);
+// }
+
+char *ft_strndup(const char *str, size_t n) {
+    size_t len = 0;
+
+    while (len < n && str[len] != '\0') {
+        len++;
+    }
+
+    char *copy = malloc(len + 1);
+
+    if (!copy) {
+        return NULL;  // Memory allocation failed
+    }
+
+    ft_memcpy(copy, str, len);
+    copy[len] = '\0';
+
+    return copy;
 }
 
-char	*ft_strjoin(char *left_str, char *buff)
+char	*ft_strjoin(char *join, char *buff)
 {
-	size_t	i;
-	size_t	j;
-	char	*str;
+	size_t i;
+	size_t j;
+	char *str;
 
-
-	if (!left_str || !buff)
+	if (!join || !buff)
 		return (NULL);
-	str = malloc(sizeof(char) * ((ft_strlen(left_str) + ft_strlen(buff)) + 1));
+	str = malloc(sizeof(char) * ((ft_strlen(join) + ft_strlen(buff)) + 1));
 	if (str == NULL)
 		return (NULL);
 	i = -1;
 	j = 0;
-	if (left_str)
-		while (left_str[++i] != '\0')
-			str[i] = left_str[i];
+	if (join)
+		while (join[++i] != '\0')
+			str[i] = join[i];
 	while (buff[j] != '\0')
 		str[i++] = buff[j++];
-	str[ft_strlen(left_str) + ft_strlen(buff)] = '\0';
-	free(left_str);
+	str[i] = '\0';
+	free(join);
 	return (str);
 }
-
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -103,7 +119,7 @@ char	*ft_strchr(const char *s, int c)
 
 void	ft_bzero(void *s, size_t n)
 {
-	size_t	i;
+	size_t i;
 
 	i = 0;
 	while (i < n)
