@@ -1,14 +1,27 @@
-#include "get_next_line.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+
+	+:+     */
+/*   By: jotomas- <jotomas-@student.42.fr>          +#+  +:+
+	+#+        */
+/*                                                +#+#+#+#+#+
+	+#+           */
+/*   Created: 2023/11/29 16:19:28 by jotomas-          #+#    #+#             */
+/*   Updated: 2023/11/29 16:19:28 by jotomas-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "get_next_line.h"
 
 char	*get_buffer(int fd, char *line)
 {
-	char *buff;
-	int bytes;
+	char	*buff;
+	int		bytes;
 
-	if(!line)
+	if (!line)
 		line = calloc(1, 1);
-
 	bytes = 1;
 	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	while (!ft_strchr(line, '\n') && bytes != 0)
@@ -27,15 +40,14 @@ char	*get_buffer(int fd, char *line)
 	return (line);
 }
 
-
 // Move to the next line.
 char	*get_next(char *buff)
 {
-	char *new;
-	char *str;
-	size_t length;
+	char	*new;
+	char	*str;
+	size_t	length;
 
-	if(!buff)
+	if (!buff)
 		return (NULL);
 	new = strchr(buff, '\n');
 	if (!new)
@@ -44,38 +56,35 @@ char	*get_next(char *buff)
 	str = ft_strndup(buff, length);
 	return (str);
 }
+
 // Move the buffer to the next ocurrency. then return a new buffer.
 char	*ft_realloc(char *buff)
 {
-	char *str;
-	size_t length;
-	char *result;
+	char	*str;
+	size_t	length;
+	char	*result;
 
-	if(!buff)
-	 	return NULL;
+	if (!buff)
+		return (NULL);
 	str = ft_strchr(buff, '\n');
 	if (!str)
 	{
 		free(buff);
 		return (NULL);
 	}
-
 	length = str - buff + 1;
-
-	result = ft_strndup(buff + length , length);
-
+	result = ft_strndup(buff + length, length);
 	free(buff);
 	return (result);
 }
 
 char	*get_next_line(int fd)
 {
-	static char *buff;
-	char *line;
+	static char	*buff;
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-
 	buff = get_buffer(fd, buff);
 	if (!buff)
 		return (NULL);

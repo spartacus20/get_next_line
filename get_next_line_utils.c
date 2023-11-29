@@ -15,83 +15,49 @@
 
 #include "get_next_line.h"
 
-
 size_t	ft_strlen(const char *str)
 {
-	int i;
+	int	i;
+
 	i = 0;
 	while (str[i] != '\0')
 		i++;
-
 	return (i);
 }
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+char	*ft_strndup(const char *str, size_t n)
 {
-	size_t i;
-	char *str_dest;
-	const char *str_src;
+	size_t	len;
+	char	*copy;
+	size_t	i;
 
-	if ((!dest && !src) || n == 0)
-		return (dest);
-	str_dest = dest;
-	str_src = src;
+	len = 0;
 	i = 0;
+	while (len < n && str[len] != '\0')
+		len++;
+	copy = malloc(len + 1);
+	if (!copy)
+		return (NULL);
 	while (i < n)
 	{
-		str_dest[i] = str_src[i];
+		copy[i] = str[i];
 		i++;
 	}
-	return (dest);
-}
-
-// char *ft_strndup(const char *str, size_t n)
-// {
-// 	size_t len;
-// 	char *copy;
-
-// 	len = 0;
-// 	while(len < n && str[len])
-// 		len++;
-
-// 	if ((copy = malloc(len + 1)) == NULL)
-// 		return (NULL);
-// 	ft_memcpy(copy, str, len);
-// 	copy[len] = '\0';
-// 	return (copy);
-// }
-
-char *ft_strndup(const char *str, size_t n) {
-    size_t len = 0;
-
-    while (len < n && str[len] != '\0') {
-        len++;
-    }
-
-    char *copy = malloc(len + 1);
-
-    if (!copy) {
-        return NULL;  // Memory allocation failed
-    }
-
-    ft_memcpy(copy, str, len);
-    copy[len] = '\0';
-
-    return copy;
+	copy[len] = '\0';
+	return (copy);
 }
 
 char	*ft_strjoin(char *join, char *buff)
 {
-	size_t i;
-	size_t j;
-	char *str;
+	size_t	i;
+	size_t	j;
+	char	*str;
 
 	if (!join || !buff)
 		return (NULL);
 	str = malloc(sizeof(char) * ((ft_strlen(join) + ft_strlen(buff)) + 1));
 	if (str == NULL)
 		return (NULL);
-
 	i = -1;
 	j = 0;
 	if (join)
@@ -118,25 +84,19 @@ char	*ft_strchr(const char *s, int c)
 		return (NULL);
 }
 
-void	ft_bzero(void *s, size_t n)
-{
-	size_t i;
-
-	i = 0;
-	while (i < n)
-	{
-		((char *)s)[i] = 0;
-		i++;
-	}
-}
-
 void	*ft_calloc(size_t count, size_t size)
 {
-	void *ptr;
+	void	*ptr;
+	size_t	i;
 
 	ptr = malloc(count * size);
 	if (ptr == NULL)
 		return (ptr);
-	ft_bzero(ptr, size * count);
+	i = 0;
+	while (i < size)
+	{
+		((char *)ptr)[i] = 0;
+		i++;
+	}
 	return (ptr);
 }
