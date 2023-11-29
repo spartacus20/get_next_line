@@ -8,3 +8,7 @@ a.out
 gnlTester
 get_next_line.h.gch
 tests
+main.c
+test2 copy.txt
+test3.txt
+get_next_line_re.c

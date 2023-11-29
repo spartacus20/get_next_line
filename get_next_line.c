@@ -16,6 +16,7 @@ char	*get_buffer(int fd, char *line)
 		bytes = read(fd, buff, BUFFER_SIZE);
 		if (bytes == -1)
 		{
+			free(line);
 			free(buff);
 			return (NULL);
 		}
@@ -34,14 +35,13 @@ char	*get_next(char *buff)
 	char *str;
 	size_t length;
 
-	new = strchr(buff, '\n');
-
-	if (!buff || !new)
+	if(!buff)
 		return (NULL);
-
+	new = strchr(buff, '\n');
+	if (!new)
+		return (NULL);
 	length = new - buff + 1;
 	str = ft_strndup(buff, length);
-	// printf("new : %s \n\n", str);
 	return (str);
 }
 // Move the buffer to the next ocurrency. then return a new buffer.
@@ -51,9 +51,8 @@ char	*ft_realloc(char *buff)
 	size_t length;
 	char *result;
 
-	if (!buff)
-		return (NULL);
-
+	if(!buff)
+	 	return NULL;
 	str = ft_strchr(buff, '\n');
 	if (!str)
 	{
@@ -61,9 +60,9 @@ char	*ft_realloc(char *buff)
 		return (NULL);
 	}
 
-	length = str - buff;
+	length = str - buff + 1;
 
-	result = ft_strndup(buff + length + 1, length);
+	result = ft_strndup(buff + length , length);
 
 	free(buff);
 	return (result);
@@ -75,7 +74,7 @@ char	*get_next_line(int fd)
 	char *line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (0);
+		return (NULL);
 
 	buff = get_buffer(fd, buff);
 	if (!buff)
@@ -85,27 +84,28 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-int	main(void)
-{
-	int fd = open("test2.txt", O_RDONLY);
-	char *line;
-	int i = 0;
+// int	main(void)
+// {
+// 	int fd = open("test3.txt", O_RDONLY);
+// 	char *line;
+// 	int i = 0;
 
-	if (fd < 0)
-	{
-		printf("Something went wrong opening test.txt");
-		return (1);
-	}
+// 	if (fd < 0)
+// 	{
+// 		printf("Something went wrong opening test.txt");
+// 		return (1);
+// 	}
 
-	line = get_next_line(fd); // Initialize line before entering the loop
-
-	while (line != NULL)
-	{
-		printf("line [%02d]: %s\n", i, line);
-		free(line);
-		i++;
-		line = get_next_line(fd); // Get the next line
-	}
-	close(fd);
-	return (0);
-}
+// 	line = get_next_line(fd); // Initialize line before entering the loop
+// 	// printf("line [%02d]: %s\n", i, line);
+// 	// free(line);
+// 	while (line != NULL)
+// 	{
+// 		printf("line [%02d]: %s\n", i, line);
+// 		free(line);
+// 		i++;
+// 		line = get_next_line(fd); // Get the next line
+// 	}
+// 	close(fd);
+// 	return (0);
+// }

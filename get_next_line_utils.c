@@ -91,6 +91,7 @@ char	*ft_strjoin(char *join, char *buff)
 	str = malloc(sizeof(char) * ((ft_strlen(join) + ft_strlen(buff)) + 1));
 	if (str == NULL)
 		return (NULL);
+
 	i = -1;
 	j = 0;
 	if (join)
