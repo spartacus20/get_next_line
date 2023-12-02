@@ -17,12 +17,13 @@
 
 size_t	ft_strlen(const char *str)
 {
-	int	i;
+	if(!str || *str == '\0')
+		return 0;
 
-	i = 0;
-	while (str[i] != '\0')
-		i++;
-	return (i);
+	const char *end = str;
+	while(*end)
+		end++;
+	return ((size_t)(end - str));
 }
 
 char	*ft_strndup(const char *str, size_t n)

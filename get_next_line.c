@@ -90,29 +90,3 @@ char	*get_next_line(int fd)
 	buff = ft_realloc(buff);
 	return (line);
 }
-
-// int	main(void)
-// {
-// 	int fd = open("test3.txt", O_RDONLY);
-// 	char *line;
-// 	int i = 0;
-
-// 	if (fd < 0)
-// 	{
-// 		printf("Something went wrong opening test.txt");
-// 		return (1);
-// 	}
-
-// 	line = get_next_line(fd); // Initialize line before entering the loop
-// 	// printf("line [%02d]: %s\n", i, line);
-// 	// free(line);
-// 	while (line != NULL)
-// 	{
-// 		printf("line [%02d]: %s\n", i, line);
-// 		free(line);
-// 		i++;
-// 		line = get_next_line(fd); // Get the next line
-// 	}
-// 	close(fd);
-// 	return (0);
-// }
