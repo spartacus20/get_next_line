@@ -17,11 +17,12 @@
 
 size_t	ft_strlen(const char *str)
 {
-	if(!str || *str == '\0')
-		return 0;
+	const char	*end;
 
-	const char *end = str;
-	while(*end)
+	end = str;
+	if (!str || *str == '\0')
+		return (0);
+	while (*end)
 		end++;
 	return ((size_t)(end - str));
 }

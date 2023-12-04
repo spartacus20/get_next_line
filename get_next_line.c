@@ -15,17 +15,15 @@
 
 #include "get_next_line.h"
 
-
 char	*get_buffer(int fd, char *line)
 {
-	char *buff;
-	int bytes;
+	char	*buff;
+	int		bytes;
 
 	if (!line)
 		line = calloc(1, 1);
 	bytes = 1;
 	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	// Grow the buffer with join for each call.
 	while (!ft_strchr(line, '\n') && bytes != 0)
 	{
 		bytes = read(fd, buff, BUFFER_SIZE);
@@ -45,23 +43,25 @@ char	*get_buffer(int fd, char *line)
 // Move to the next line.
 char	*get_next(char *buff)
 {
-	char *new;
-	int i;
+	char	*new;
+	int		i;
 
 	i = 0;
- 	if(!buff[i])
-		return NULL;
-	while(buff[i] && buff[i] != '\n')
+	if (!buff[i])
+		return (NULL);
+	while (buff[i] && buff[i] != '\n')
 		i++;
 	new = ft_strndup(buff, i + 1);
-	return new;
+	return (new);
 }
 
-// Move the buffer to the next ocurrency. The delete the previous buffer and return a new one.
+/*  Move the buffer to the next ocurrency.
+The delete the previous buffer and return a new one.
+*/
 char	*ft_realloc(char *buff)
 {
-	char *str;
-	char *result;
+	char	*str;
+	char	*result;
 
 	if (!buff)
 		return (NULL);
@@ -71,15 +71,15 @@ char	*ft_realloc(char *buff)
 		free(buff);
 		return (NULL);
 	}
-	result = ft_strndup(str + 1 , strlen(str + 1)); //Changed the way how to count the  lenght.
+	result = ft_strndup(str + 1, strlen(str + 1));
 	free(buff);
 	return (result);
 }
 
 char	*get_next_line(int fd)
 {
-	static char *buff;
-	char *line;
+	static char	*buff;
+	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
