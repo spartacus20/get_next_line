@@ -21,7 +21,7 @@ char	*get_buffer(int fd, char *line)
 	int		bytes;
 
 	if (!line)
-		line = calloc(1, 1);
+		line = 	ft_calloc(1, 1);
 	bytes = 1;
 	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	while (!ft_strchr(line, '\n') && bytes != 0)
@@ -71,7 +71,7 @@ char	*ft_realloc(char *buff)
 		free(buff);
 		return (NULL);
 	}
-	result = ft_strndup(str + 1, strlen(str + 1));
+	result = ft_strndup(str + 1, ft_strlen(str + 1));
 	free(buff);
 	return (result);
 }
