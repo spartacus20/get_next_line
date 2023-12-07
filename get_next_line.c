@@ -21,7 +21,7 @@ char	*get_buffer(int fd, char *line)
 	int		bytes;
 
 	if (!line)
-		line = 	ft_calloc(1, 1);
+		line = ft_calloc(1, 1);
 	bytes = 1;
 	buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
 	while (!ft_strchr(line, '\n') && bytes != 0)
